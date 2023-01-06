@@ -56,11 +56,13 @@ class CheeseActivity : BaseSearchActivity() {
 
         searchTextObservable
             .subscribeOn(AndroidSchedulers.mainThread())
+            .doOnNext { showProgress() }
             .observeOn(Schedulers.io())
             .map { cheeseSearchEngine.search(it) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-            showResult(it)
+                hideProgress()
+                showResult(it)
         }
     }
 }
