@@ -85,6 +85,8 @@ class CheeseActivity : BaseSearchActivity() {
             emitter.setCancellable { queryEditText.removeTextChangedListener(textWatcher) }
 
         }
-        return textChangeObservable
+        return textChangeObservable.filter {
+            it.length >= 2
+        }
     }
 }
