@@ -33,7 +33,6 @@ package com.raywenderlich.android.cheesefinder
 import android.text.Editable
 import android.text.TextWatcher
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_cheeses.*
@@ -54,8 +53,9 @@ class CheeseActivity : BaseSearchActivity() {
 
     override fun onStart() {
         super.onStart()
-        val searchTextObservable: Observable<String> = createTextChangeObservable()
-
+        val buttonClickStream = createButtonClickObservable()
+        val textChangeStream = createTextChangeObservable()
+        val searchTextObservable = Observable.merge<String>(buttonClickStream, textChangeStream)
         searchTextObservable
             .subscribeOn(AndroidSchedulers.mainThread())
             .doOnNext { showProgress() }
